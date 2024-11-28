@@ -4,9 +4,18 @@
  */
 package com.abimulia.sm.orders;
 
+
 import java.util.Set;
 
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Exchange;
+import org.springframework.amqp.core.ExchangeBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.data.repository.ListCrudRepository;
@@ -77,4 +86,25 @@ record Order(@Id Integer id, Set<LineItem> lineItems) {
 @Table("orders_line_items")
 record LineItem(@Id Integer id, int product, int quantity) {
 	
+}
+
+@Configuration
+class AmqpIntegrationConfiguration{
+	
+	@Bean
+	Binding binding(Queue queue, Exchange exchange) {
+		return BindingBuilder.bind(queue).to(exchange).with(ORDERS_Q).noargs();
+	}
+	
+	@Bean 
+	Exchange exchange() {
+		return ExchangeBuilder.directExchange(ORDERS_Q).build();
+	}
+	
+	@Bean
+	Queue queue() {
+		return QueueBuilder.durable(ORDERS_Q).build();
+	}
+	
+	static final String ORDERS_Q = "orders";
 }

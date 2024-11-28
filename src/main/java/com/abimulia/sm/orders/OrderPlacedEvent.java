@@ -4,6 +4,8 @@
  */
 package com.abimulia.sm.orders;
 
+import org.springframework.modulith.events.Externalized;
+
 /**
  * @author abimu
  *
@@ -13,6 +15,8 @@ package com.abimulia.sm.orders;
  * 
  * Copyright(c) 2024 Abi Mulia
  */
+
+@Externalized(target = AmqpIntegrationConfiguration.ORDERS_Q)
 public record OrderPlacedEvent(int order,String message) {
 
 }

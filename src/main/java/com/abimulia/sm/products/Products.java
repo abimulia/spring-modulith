@@ -23,12 +23,12 @@ import com.abimulia.sm.orders.OrderPlacedEvent;
 
 @Service
 @Transactional
-public class Products {
+class Products {
 	
 	@ApplicationModuleListener
 	void on (OrderPlacedEvent orderPlaceEvent) throws Exception {
 		System.out.println("starting ["+ orderPlaceEvent+"]");
-		Thread.sleep(5_000);
+		Thread.sleep(10_000);
 		System.out.println("stopping ["+ orderPlaceEvent+"]");
 		
 	}
