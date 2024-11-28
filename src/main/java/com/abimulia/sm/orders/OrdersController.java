@@ -6,6 +6,7 @@ package com.abimulia.sm.orders;
 
 import java.util.Set;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.data.repository.ListCrudRepository;
@@ -48,14 +49,17 @@ class OrdersController {
 @Transactional
 class OrderService {
 	private final OrderRepository repository;
+	private final ApplicationEventPublisher eventPublisher;
 	
-	OrderService(OrderRepository repository){
+	OrderService(OrderRepository repository,ApplicationEventPublisher eventPublisher){
 		this.repository = repository;
+		this.eventPublisher = eventPublisher;
 	}
 	
 	void place(Order order) {
 		var saved = this.repository.save(order);
 		System.out.println("saved ["+saved+"]");
+		this.eventPublisher.publishEvent(new OrderPlacedEvent(saved.id(),"Order placed"));
 	}
 	
 	
