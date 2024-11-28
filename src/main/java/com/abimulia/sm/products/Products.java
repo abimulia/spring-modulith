@@ -5,6 +5,7 @@
 package com.abimulia.sm.products;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.modulith.ApplicationModuleListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +25,7 @@ import com.abimulia.sm.orders.OrderPlacedEvent;
 @Transactional
 public class Products {
 	
-	@EventListener
+	@ApplicationModuleListener
 	void on (OrderPlacedEvent orderPlaceEvent) throws Exception {
 		System.out.println("starting ["+ orderPlaceEvent+"]");
 		Thread.sleep(5_000);
